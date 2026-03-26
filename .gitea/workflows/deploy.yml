@@ -21,4 +21,4 @@ jobs:
         run: docker build -t seoyon-project
 
       - name: start container 
-        runL docker run -d --name seoyon-project -p 5000:5000 seoyon-project       
+        run: docker run -d --name seoyon-project -p 5000:5000 seoyon-project       

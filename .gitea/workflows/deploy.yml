@@ -15,10 +15,10 @@ jobs:
 
 
       - name: remove existed container
-        run: docker -rm -f seoyon-project || true
+        run: docker -rm -f seoyeon-tour || true
 
       - name: Docker build
-        run: docker build -t seoyon-project
+        run: docker build -t seoyeon-tour .
 
       - name: start container 
-        run: docker run -d --name seoyon-project -p 5000:5000 seoyon-project       
+        run: docker run -d --name seoyeon-tour -p 5000:5000 seoyon-tour       

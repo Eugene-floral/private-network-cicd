@@ -15,7 +15,7 @@ jobs:
 
 
       - name: remove existed container
-        run: docker -rm -f seoyeon-tour || true
+        run: docker rm -f seoyeon-tour || true
 
       - name: Docker build
         run: docker build -t seoyeon-tour .

@@ -10,7 +10,7 @@ const PORT=5000
 //메인 홈 페이지
 
 app.get('/' , (req,res) => {
-	 res.sendFile(path.join(__dirname, '/views', 'index.html'))
+	 res.sendFile(path.join(__dirname, '/views', 'index2.html'))
 });
 
 //여행 상품 목혹

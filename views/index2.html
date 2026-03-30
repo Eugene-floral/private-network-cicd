@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seoyeon Tour</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans KR', sans-serif; }
+    </style>
+</head>
+<body class="bg-white text-gray-800">
+
+    <!-- 네비게이션 -->
+    <nav class="fixed top-0 w-full bg-white shadow-sm z-50 px-8 py-4 flex justify-between items-center">
+        <h1 class="text-xl font-bold tracking-widest">SEOYEON TOUR</h1>
+        <div class="flex gap-8 text-sm text-gray-500">
+            <a href="/" class="hover:text-gray-900 transition">홈</a>
+            <a href="/introduce" class="hover:text-gray-900 transition">소개</a>
+            <a href="/reviews" class="hover:text-gray-900 transition">리뷰</a>
+            <a href="/contact" class="hover:text-gray-900 transition">문의</a>
+        </div>
+    </nav>
+
+    <!-- 히어로 섹션 -->
+    <section class="h-screen flex flex-col justify-center items-center text-center px-4 mt-0">
+        <p class="text-sm tracking-widest text-gray-400 mb-4">아름다운 인연의 시작</p>
+        <h2 class="text-5xl font-light mb-6 leading-tight">
+            꿈꾸던 여행을<br>시연투어와 함께
+        </h2>
+        <p class="text-gray-400 mb-10 text-lg">허니문 · 패키지 · 단체여행 전문</p>
+        <a href="/introduce" 
+           class="border border-gray-800 px-8 py-3 text-sm tracking-widest hover:bg-gray-800 hover:text-white transition duration-300">
+            여행 상품 보기
+        </a>
+    </section>
+
+    <!-- 상품 섹션 -->
+    <section class="py-24 px-8 bg-gray-50">
+        <p class="text-center text-sm tracking-widest text-gray-400 mb-2">PRODUCTS</p>
+        <h3 class="text-center text-3xl font-light mb-16">여행 상품</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div class="bg-white p-8 hover:shadow-lg transition duration-300">
+                <p class="text-xs tracking-widest text-gray-400 mb-2">HONEYMOON</p>
+                <h4 class="text-xl font-medium mb-3">허니문</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">유럽, 몰디브, 발리 등<br>특별한 허니문 여행</p>
+            </div>
+            <div class="bg-white p-8 hover:shadow-lg transition duration-300">
+                <p class="text-xs tracking-widest text-gray-400 mb-2">PACKAGE</p>
+                <h4 class="text-xl font-medium mb-3">패키지</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">알차게 구성된<br>패키지 여행 상품</p>
+            </div>
+            <div class="bg-white p-8 hover:shadow-lg transition duration-300">
+                <p class="text-xs tracking-widest text-gray-400 mb-2">GROUP</p>
+                <h4 class="text-xl font-medium mb-3">단체여행</h4>
+                <p class="text-gray-400 text-sm leading-relaxed">기업·학교·동호회<br>단체 맞춤 여행</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer class="py-12 px-8 text-center text-gray-400 text-sm">
+        <p class="font-medium text-gray-800 mb-2">SEOYEON TOUR</p>
+        <p>Tel: 02-0000-0000 · Email: seoyeon@tour.com</p>
+        <p class="mt-4">© 2025 Seoyeon Tour. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

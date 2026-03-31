@@ -33,14 +33,46 @@
         </div>
     </nav>
     <!-- 히어로 섹션 -->
-    <section class="hero">
-        <div>
-            <p class="text-muted small mb-3 letter-spacing">아름다운 인연의 시작</p>
-            <h1 class="display-4 fw-light mb-4">꿈꾸던 여행을<br>시연투어와 함께</h1>
-            <p class="text-muted mb-5">허니문 · 패키지 · 단체여행 전문</p>
-            <a href="/introduce" class="btn btn-outline-dark px-5 py-3">여행 상품 보기</a>
+<!-- 히어로 섹션 대신 이걸로 교체 -->
+<div id="heroCarousel" class="carousel slide" data-bs-ride="false">
+    
+    <!-- 슬라이드 -->
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="/images/paris.jpg" class="d-block w-100" style="height:100vh; object-fit:cover;" alt="파리">
+            <div class="carousel-caption d-flex flex-column justify-content-center" style="top:0; bottom:0;">
+                <h1 class="display-3 fw-bold">SEAYEARN TOUR</h1>
+                <h2 class="fw-normal">아름다운 인연의 시작</h2>
+                <p>돌아오시는 그날까지 시연투어가 함께 합니다</p>
+            </div>
         </div>
-    </section>
+        <div class="carousel-item">
+            <img src="/images/venice.jpg" class="d-block w-100" style="height:100vh; object-fit:cover;" alt="베니스">
+            <div class="carousel-caption d-flex flex-column justify-content-center" style="top:0; bottom:0;">
+                <h1 class="display-3 fw-bold">SEAYEARN TOUR</h1>
+                <h2 class="fw-normal">아름다운 인연의 시작</h2>
+                <p>돌아오시는 그날까지 시연투어가 함께 합니다</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img src="/images/maldives.jpg" class="d-block w-100" style="height:100vh; object-fit:cover;" alt="몰디브">
+            <div class="carousel-caption d-flex flex-column justify-content-center" style="top:0; bottom:0;">
+                <h1 class="display-3 fw-bold">SEAYEARN TOUR</h1>
+                <h2 class="fw-normal">아름다운 인연의 시작</h2>
+                <p>돌아오시는 그날까지 시연투어가 함께 합니다</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 좌우 화살표 -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon"></span>
+    </button>
+
+</div>
 
 <!-- 상품 섹션 -->
     <section class="py-5 bg-light">

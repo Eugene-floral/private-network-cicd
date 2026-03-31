@@ -25,7 +25,7 @@ res.sendFile(path.join(__dirname,'/views' , 'event.html'));
 //허니문-휴양지 목록
 
 app.get('/honeymoon-resort', (req,res) => {
-res.sendFile(path.join(__dirname,'/views' , 'honeymoon-resort'));
+res.sendFile(path.join(__dirname,'/views' , 'honeymoon-resort.html'));
 });
 
 

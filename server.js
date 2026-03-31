@@ -18,6 +18,14 @@ app.get('/introduce' , (req,res) => {
 res.sendFile(path.join(__dirname, '/views' , 'introduce.html'));
 });
 
+app.get('/event' ,(req,res) => {
+
+res.sendFile(path.join
+
+(__dirname,'/views' , 'event.html'));
+
+});
+
 app.listen(PORT, ()=> console.log('web is started'));
 
 

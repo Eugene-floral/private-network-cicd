@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const db = require('./db');
+//const db = require('./db');
 const bcrypt = require('bcrypt');
 
 app.use(express.json());

@@ -75,36 +75,34 @@ app.get('/honeymoon-resort/koh-samui', (req, res) => {
     res.sendFile(path.join(__dirname, '/views/detail', 'koh-samui.html'));
 });
 
-
-app.post('/signup', async (req, res) => {
-    try {
-        // 1. 브라우저가 보낸 데이터 꺼내기
-        const { user_id, password, name, gender, birth_date, email, phonenum, address } = req.body;
-
-        // 2. 비밀번호 암호화
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-        // 3. DB에 저장 (컬럼명 'passward' 오타 주의!)
-        const sql = `
-            INSERT INTO users (user_id, password, name, gender, birth_date, email, phonenum, address) 
-        `
+app.post('/signup', async (req, res) => {                                                            
+    try {                                                                                            
+        // 1. 브라우저가 보낸 데이터 꺼내기 (HTML의 name 값들과 일치해야 함)
+        const { user_id, password, name, gender, birth_date, email, phonenum, address } = req.body;  
+                                                                                                     
+        // 2. 비밀번호 암호화                                                                        
+        const saltRounds = 10;                                                                       
+        const hashedPassword = await bcrypt.hash(password, saltRounds);                              
+                                                                                                     
+        // 3. DB에 저장 (서연님의 DB 컬럼명이 'passward'라면 그대로, 'password'로 고치셨다면 수정!)
+        // 주의: 마지막에 닫는 괄호 )와 세미콜론 ; 을 확인하세요.
+        const sql = `                                                                                
+            INSERT INTO users (user_id, password, name, gender, birth_date, email, phonenum, address)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        `;                                                                                            
+        
         const values = [user_id, hashedPassword, name, gender, birth_date, email, phonenum, address];
-
-        await db.execute(sql, values);
-
-        // 4. 성공 응답
-        res.status(201).json({ message: "회원가입이 완료되었습니다!" });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "회원가입 중 오류가 발생했습니다." });
-    }
+                                                                                                     
+        await db.execute(sql, values);                                                               
+                                                                                                     
+        // 4. 성공 응답                                                                              
+        res.status(201).json({ message: "회원가입이 완료되었습니다!" });                             
+                                                                                                     
+    } catch (error) {                                                                                
+        console.error("회원가입 에러 상세:", error);                                                                        
+        res.status(500).json({ error: "회원가입 중 오류가 발생했습니다.", details: error.message });                         
+    }                                                                                                
 });
-
-app.listen(PORT, ()=> console.log('web is started'));
-
-
 
 
 

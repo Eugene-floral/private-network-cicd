@@ -22,15 +22,32 @@ app.get('/event' ,(req,res) => {
 res.sendFile(path.join(__dirname,'/views' , 'event.html'));
 });
 
-//허니문-휴양지 목록
+//허니문 - 휴양지 목록
 
 app.get('/honeymoon-resort', (req,res) => {
 res.sendFile(path.join(__dirname,'/views' , 'honeymoon-resort.html'));
 });
 
+//허니문 - 유럽 목록
 
+app.get('/honeymoon-europe' , (res,req) => {
+res.sendFile(path.join(__dirname,'views' , 'honeymoon0europe.html'));
+});
+
+//단체 투어 목록
+
+app.get('/group' ,(res,req) => {
+res.sendFile(path.join(__dirname, 'views' ,'group.html'));
+});
+
+//패키지 투어 목록
+app.get('/package' ,(res,req) => { 
+res.sedFile(path.join(__dirname,'/views' ,'package.html'));
+});
 
 app.listen(PORT, ()=> console.log('web is started'));
+
+
 
 
 

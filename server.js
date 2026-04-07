@@ -30,18 +30,18 @@ res.sendFile(path.join(__dirname,'/views' , 'honeymoon-resort.html'));
 
 //허니문 - 유럽 목록
 
-app.get('/honeymoon-europe' , (res,req) => {
+app.get('/honeymoon-europe' , (req,res) => {
 res.sendFile(path.join(__dirname,'/views' , 'honeymoon-europe.html'));
 });
 
 //단체 투어 목록
 
-app.get('/group' ,(res,req) => {
+app.get('/group' ,(req,res) => {
 res.sendFile(path.join(__dirname, '/views' ,'group.html'));
 });
 
 //패키지 투어 목록
-app.get('/package' ,(res,req) => { 
+app.get('/package' ,(req,res) => { 
 res.sedFile(path.join(__dirname,'/views' ,'package.html'));
 });
 

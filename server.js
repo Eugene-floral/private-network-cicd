@@ -1,7 +1,8 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const db = require(./db);
+const db = require('./db');
+const bcrypt = require('bcrypt');
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -43,7 +44,7 @@ res.sendFile(path.join(__dirname, '/views' ,'group.html'));
 
 //패키지 투어 목록
 app.get('/package' ,(req,res) => { 
-res.sedFile(path.join(__dirname,'/views' ,'package.html'));
+res.sendFile(path.join(__dirname,'/views' ,'package.html'));
 });
 
 //로그인창.

@@ -5,7 +5,7 @@ const db = require(./db);
 
 app.use(express.json());
 app.use(express.static('public'));
-
+app.use(express.urlencoded({ extended: true }));
 const PORT=5000
 
 //메인 홈 페이지

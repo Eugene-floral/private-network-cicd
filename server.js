@@ -31,7 +31,7 @@ res.sendFile(path.join(__dirname,'/views' , 'honeymoon-resort.html'));
 //허니문 - 유럽 목록
 
 app.get('/honeymoon-europe' , (res,req) => {
-res.sendFile(path.join(__dirname,'views' , 'honeymoon0europe.html'));
+res.sendFile(path.join(__dirname,'views' , 'honeymoon-europe.html'));
 });
 
 //단체 투어 목록

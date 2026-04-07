@@ -45,6 +45,31 @@ app.get('/package' ,(req,res) => {
 res.sedFile(path.join(__dirname,'/views' ,'package.html'));
 });
 
+//상세 페이지
+
+// 허니문-유럽 상세
+app.get('/honeymoon-europe/paris', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views/detail', 'paris.html'));
+});
+app.get('/honeymoon-europe/venice', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views/detail', 'venice.html'));
+});
+app.get('/honeymoon-europe/portugal', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views/detail', 'portugal.html'));
+});
+
+// 허니문-휴양지 상세
+app.get('/honeymoon-resort/australia', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views/detail', 'australia.html'));
+});
+app.get('/honeymoon-resort/mauritius', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views/detail', 'mauritius.html'));
+});
+app.get('/honeymoon-resort/koh-samui', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views/detail', 'koh-samui.html'));
+});
+
+
 app.listen(PORT, ()=> console.log('web is started'));
 
 

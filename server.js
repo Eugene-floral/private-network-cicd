@@ -43,7 +43,7 @@ res.sendFile(path.join(__dirname, '/views' ,'group.html'));
 });
 
 //패키지 투어 목록
-app.get('/package' ,(req,res) => { 
+app.get('/package' ,(req,res) => {
 res.sendFile(path.join(__dirname,'/views' ,'package.html'));
 });
 
@@ -93,7 +93,12 @@ app.post('/signup', async (req, res) => {
 
         await db.execute(sql, values);
         // 4.성공 응답.
-        res.status(201).json({ message: "회원가입이 완료되었습니다" });
+        res.status(201).send(`
+		<script>
+			alert("signup complete!");
+			location.href =  "/login";
+		</script>
+	`);
     } catch (error) {
         console.error("회원가입 에러 상세:", error);
         res.status(500).json({ error: "회원가입 중 오류가 발생했습니다.", details: error.message });

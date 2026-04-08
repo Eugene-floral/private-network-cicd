@@ -47,14 +47,13 @@ app.get('/package' ,(req,res) => {
 res.sendFile(path.join(__dirname,'/views' ,'package.html'));
 });
 
-//로그인창.
 
 app.get('/signup-page', (req,res) => {
 res.sendFile(path.join(__dirname, '/views' , 'signup.html'));
 });
 
 //상세 페이지.
-// 허니문-유럽 상세
+//honey moon detail
 app.get('/honeymoon-europe/paris', (req, res) => {
     res.sendFile(path.join(__dirname, '/views/detail', 'paris.html'));
 });
@@ -65,7 +64,7 @@ app.get('/honeymoon-europe/portugal', (req, res) => {
     res.sendFile(path.join(__dirname, '/views/detail', 'portugal.html'));
 });
 
-// 허니문-휴양지 상세
+
 app.get('/honeymoon-resort/australia', (req, res) => {
     res.sendFile(path.join(__dirname, '/views/detail', 'australia.html'));
 });
@@ -78,9 +77,8 @@ app.get('/honeymoon-resort/koh-samui', (req, res) => {
 
 app.post('/signup', async (req, res) => {
     try {
-        // 1. 브라우저가 보낸 데이터 꺼내기 (HTML의 name 값들과 일치해야 함)
+
         const { user_id, password, name, gender, birth_date, email, phonenum, address } = req.body;
-        // 2. 비밀번호 암호화
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -99,8 +97,8 @@ app.post('/signup', async (req, res) => {
 		</script>
 	`);
     } catch (error) {
-        console.error("회원가입 에러 상세:", error);
-        res.status(500).json({ error: "회원가입 중 오류가 발생했습니다.", details: error.message });
+        console.error("signup error details :" , error);
+        res.status(500).json({ error: "error detected!! " , details: error.message });
     }
 });
 

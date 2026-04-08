@@ -83,8 +83,7 @@ app.post('/signup', async (req, res) => {
         // 2. 비밀번호 암호화
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        // 3. DB에 저장 (서연님의 DB 컬럼명이 'passward'라면 그대로, 'password'로 고치셨다면 수정!)
-        // 주의: 마지막에 닫는 괄호 )와 세미콜론 ; 을 확인하세요.
+
         const sql = `
             INSERT INTO users (user_id, password, name, gender, birth_date, email, phonenum, address)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -92,7 +91,7 @@ app.post('/signup', async (req, res) => {
         const values = [user_id, hashedPassword, name, gender, birth_date, email, phonenum, address];
 
         await db.execute(sql, values);
-        // 4.성공 응답.
+
         res.status(201).send(`
 		<script>
 			alert("signup complete!");

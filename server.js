@@ -9,6 +9,7 @@ app.use(express.urlencoded({ extended: true }));
 const PORT=5000
 app.get('/' , (req,res) => {
 	 res.sendFile(path.join(__dirname, '/views', 'index.html'))
+});
 app.get('/introduce' , (req,res) => {
 res.sendFile(path.join(__dirname, '/views' , 'introduce.html'));
 app.get('/event' ,(req,res) => {
@@ -57,7 +58,8 @@ app.post('/signup', async (req, res) => {
         console.error("signup error details :" , error);
         res.status(500).json({ error: "error detected!! " , details: error.message });
 	}
-}
+});
+
 
 	app.listen(PORT,() => {
 	console.log(`server is running on  ${PORT} `);

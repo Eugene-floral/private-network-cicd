@@ -9,15 +9,15 @@
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #ffffff; /* [변경] 전체 배경 하얀색 */
+            background-color: #ffffff;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
 
-        /* [변경] 상단 배너/로고 영역 삭제 (가리기) */
+        /* 배너 유지 */
         .navbar {
-            display: none;
+            border-bottom: 1px solid #eee;
         }
 
         /* 중앙 정렬 컨테이너 */
@@ -26,193 +26,202 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 50px 0;
+            padding-top: 100px; /* 네비바 높이만큼 여백 */
+            padding-bottom: 50px;
         }
         
         .login-container {
             width: 100%;
-            max-width: 480px; /* 조금 더 넓게 설정 */
+            max-width: 450px;
             padding: 20px;
         }
 
-        /* [변경] 상단 타이틀 "Welcome!" */
+        /* Welcome! 타이틀 스타일 */
         .welcome-title {
-            font-size: 3.5rem;
-            font-weight: 300; /* 가벼운 서체 */
-            color: #4a6fa5; /* 블루 톤 */
+            font-size: 3.2rem;
+            font-weight: 400;
+            color: #4a6fa5;
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 45px;
+            letter-spacing: -1px;
         }
 
-        /* 로그인 카드 (스타일 단순화) */
-        .login-card {
-            background-color: #ffffff;
-            padding: 0px; /* 패딩 삭제 */
-            border: none; /* 테두리 삭제 */
-        }
-
-        /* [변경] 입력창 라벨/입력창 스타일 */
+        /* 입력창 라벨 및 스타일 */
         .form-group-custom {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         .form-group-custom .form-label {
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #4a6fa5; /* 블루 톤 */
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: #4a6fa5;
             margin-bottom: 8px;
             display: block;
         }
         .form-group-custom .form-control {
-            border: 1px solid #d9d9d9;
+            border: 1px solid #e0e0e0;
             border-radius: 4px;
-            padding: 15px;
-            font-size: 1rem;
-            color: #888;
+            padding: 14px;
+            font-size: 0.95rem;
         }
         .form-group-custom .form-control:focus {
             box-shadow: none;
-            border-color: #4a6fa5; /* 포커스 시 블루 톤 */
+            border-color: #4a6fa5;
         }
 
-        /* 로그인 버튼 (블루 톤) */
-        .btn-login {
+        /* 로그인 유지 및 비번찾기 */
+        .login-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            color: #666;
+        }
+        .login-options a {
+            text-decoration: none;
+            color: #4a6fa5;
+        }
+
+        /* 로그인 버튼 */
+        .btn-signin {
             background-color: #4a6fa5;
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 12px 35px;
             font-size: 1rem;
+            border-radius: 5px;
             font-weight: 500;
-            border-radius: 4px;
-            width: auto; /* 컴팩트한 너비 */
+            transition: 0.2s;
         }
-        .btn-login:hover {
+        .btn-signin:hover {
             background-color: #3b5a8e;
             color: white;
         }
 
-        /* [변경] 로그인 유지 & 비밀번호 찾기 */
-        .remember-forgot {
+        /* 간편 로그인 구분선 */
+        .separator {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
-            margin-bottom: 30px;
-        }
-        .remember-forgot .form-check-label {
-            color: #4a6fa5;
-            font-weight: 500;
-        }
-        .remember-forgot .forgot-link {
-            text-decoration: none;
-            color: #4a6fa5;
-        }
-
-        /* [변경] 소셜 로그인 구분선 */
-        .social-login-separator {
-            position: relative;
             text-align: center;
-            margin: 50px 0 30px 0;
+            margin: 40px 0 30px 0;
+            color: #aaa;
+            font-size: 0.9rem;
         }
-        .social-login-separator hr {
-            border: 0;
-            border-top: 1px solid #dadada;
-            margin: 0;
+        .separator::before, .separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #eee;
         }
-        .social-login-separator .separator-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #ffffff;
+        .separator span {
             padding: 0 15px;
-            font-size: 0.95rem;
-            color: #a0a0a0;
-            font-weight: 300;
         }
 
-        /* [변경] 소셜 로그인 버튼 (로고 아이콘) */
-        .social-login-buttons {
+        /* 소셜 로그인 버튼 (카카오 & 네이버 원형 로고) */
+        .social-icons {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
         }
-        .btn-social-icon {
-            width: 50px;
-            height: 50px;
+        .social-btn {
+            width: 54px;
+            height: 54px;
             border-radius: 50%;
-            border: 1px solid #d9d9d9;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            transition: background-color 0.2s;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: transform 0.2s;
+            border: 1px solid #eee;
         }
-        .btn-social-icon:hover {
-            background-color: #f5f5f5;
+        .social-btn:hover {
+            transform: scale(1.1);
+        }
+        /* 카카오: 이미지 깨짐 방지를 위해 색상과 텍스트로 구현 */
+        .btn-kakao {
+            background-color: #FEE500;
+            color: #3C1E1E;
+            border: none;
+        }
+        /* 네이버: 이미지 깨짐 방지를 위해 색상과 텍스트로 구현 */
+        .btn-naver {
+            background-color: #03C75A;
+            color: white;
+            border: none;
         }
 
-        /* [변경] 하단 회원가입 링크 */
-        .create-account-link {
+        /* 하단 링크 */
+        .signup-link {
             text-align: center;
             margin-top: 40px;
             font-size: 0.9rem;
         }
-        .create-account-link a {
-            text-decoration: underline;
+        .signup-link a {
             color: #4a6fa5;
+            text-decoration: underline;
         }
-
     </style>
 </head>
 <body>
 
+    <nav class="navbar navbar-expand-lg bg-white shadow-sm fixed-top px-4">
+        <a class="navbar-brand fw-bold tracking-wide text-dark" href="/" style="text-decoration: none;">SEOYEON TOUR</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ms-auto gap-2">
+                <li class="nav-item"><a class="nav-link" href="/introduce">소개</a></li>
+                <li class="nav-item"><a class="nav-link" href="/event">이벤트</a></li>
+                <li class="nav-item"><a class="nav-link" href="/honeymoon-europe">허니문-유럽</a></li>
+                <li class="nav-item"><a class="nav-link" href="/honeymoon-resort">허니문-휴양지</a></li>
+                <li class="nav-item"><a class="nav-link" href="/group">단체여행</a></li>
+                <li class="nav-item"><a class="nav-link" href="/package">패키지</a></li>
+                <li class="nav-item"><a class="nav-link" href="/reviews">후기</a></li>
+                <li class="nav-item"><a class="nav-link text-primary fw-bold" href="/signup-page">회원가입하기</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="login-wrapper">
         <div class="login-container">
             
-            <div class="welcome-title">Welcome!</div>
+            <h1 class="welcome-title">Welcome!</h1>
 
-            <div class="login-card">
-                <form action="/login" method="POST">
-                    
-                    <div class="form-group-custom">
-                        <label for="user_id" class="form-label">Email</label>
-                        <input type="text" class="form-control" id="user_id" name="user_id" placeholder="Email" required>
-                    </div>
-                    <div class="form-group-custom">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                    </div>
-
-                    <div class="remember-forgot">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">
-                                Remember me
-                            </label>
-                        </div>
-                        <a href="#" class="forgot-link">Forgot password?</a>
-                    </div>
-
-                    <button type="submit" class="btn btn-login mb-3">Sign in</button>
-                </form>
-
-                <div class="social-login-separator">
-                    <hr>
-                    <span class="separator-text">Or sign in with</span>
+            <form action="/login" method="POST">
+                <div class="form-group-custom">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" name="email" placeholder="Email" required>
                 </div>
                 
-                <div class="social-login-buttons">
-                    <a href="#" class="btn-social-icon btn-google">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20">
-                    </a>
-                    <a href="#" class="btn-social-icon btn-apple">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" width="20">
-                    </a>
+                <div class="form-group-custom">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" placeholder="Password" required>
                 </div>
 
-                <div class="create-account-link">
-                    <a href="/signup-page">Create a new account</a>
+                <div class="login-options">
+                    <div>
+                        <input type="checkbox" id="remember" class="form-check-input me-1">
+                        <label for="remember">Remember me</label>
+                    </div>
+                    <a href="#">Forgot password?</a>
                 </div>
+
+                <button type="submit" class="btn btn-signin">Sign in</button>
+            </form>
+
+            <div class="separator">
+                <span>Or sign in with</span>
+            </div>
+
+            <div class="social-icons">
+                <a href="#" class="social-btn btn-naver" title="네이버로 로그인하기">N</a>
+                <a href="#" class="social-btn btn-kakao" title="카카오로 로그인하기">K</a>
+            </div>
+
+            <div class="signup-link">
+                <a href="/signup-page">Create a new account</a>
             </div>
         </div>
     </div>

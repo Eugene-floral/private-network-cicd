@@ -56,8 +56,10 @@ app.post('/signup', async (req, res) => {
     } catch (error) {
         console.error("signup error details :" , error);
         res.status(500).json({ error: "error detected!! " , details: error.message });
+	}
+}
 
-app.listen(PORT,() => {
+	app.listen(PORT,() => {
 	console.log(`server is running on  ${PORT} `);
 	});
-}
+

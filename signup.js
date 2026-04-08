@@ -1,4 +1,3 @@
-const db = require('./db');
 const bcrypt = require('bcrypt');
 
 async function registerUser(userData) {

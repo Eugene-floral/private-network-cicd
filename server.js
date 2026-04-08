@@ -19,6 +19,7 @@ app.get('/honeymoon-europe', (req, res) => { res.sendFile(path.join(__dirname, '
 app.get('/group', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'group.html')); });
 app.get('/package', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'package.html')); });
 app.get('/signup-page', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'signup.html')); });
+app.get('/login', (req,res) => { res.sendFile(path.join(__dirname,'/views','login.html'));});
 
 // 상세 페이지
 app.get('/honeymoon-europe/paris', (req, res) => { res.sendFile(path.join(__dirname, '/views/detail', 'paris.html')); });

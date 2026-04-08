@@ -9,66 +9,142 @@
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #ffffff; /* 배경 화이트 유지 */
+            background-color: #f5f6f7; /* 네비게이션과 대조되는 아주 옅은 그레이 배경 */
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
-        /* 중앙 정렬을 위한 컨테이너 */
+        /* [변경] 네비게이션에서 로고 이름 제거를 위한 스타일 */
+        .navbar-brand {
+            visibility: hidden; /* 영역은 유지하되 보이지 않게 */
+        }
+
+        /* 중앙 정렬 컨테이너 */
         .login-wrapper {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 100px 0; /* 네비바 높이 고려 */
+            padding: 80px 0; /* 네비바 고려 */
         }
-        /* 로그인 카드: 화면의 약 1/5 수준 (최소 너비 설정으로 가독성 확보) */
-        .login-card {
+        
+        .login-container {
             width: 100%;
-            max-width: 400px; /* 데스크탑 기준 1/5~1/4 수준의 너비 */
-            padding: 40px;
-            border-radius: 15px;
-            border: 1px solid #eee;
+            max-width: 460px; /* 네이버와 비슷한 너비 */
+            padding: 20px;
         }
+
+        /* [변경] 로그인창 위 서연투어 로고 (네이버 스타일, 살짝 투명) */
+        .brand-logo-inline {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: rgba(0, 0, 0, 0.65); /* 검은색에 65% 투명도 적용 */
+            text-align: center;
+            margin-bottom: 30px;
+            display: block;
+            text-decoration: none;
+        }
+
+        /* 로그인 카드 */
+        .login-card {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 8px; /* 더 각진 네이버 스타일 */
+            border: 1px solid #dadada;
+        }
+
+        /* [변경] 아이디/비밀번호 입력창 밀착 스타일 */
+        .input-group-merged {
+            border: 1px solid #dadada;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .input-group-merged .form-control {
+            border: none;
+            border-radius: 0;
+            padding: 15px;
+            font-size: 1rem;
+        }
+        .input-group-merged .form-control:focus {
+            box-shadow: none;
+            background-color: #faffbd !important; /* 네이버 특유의 포커스 색상 */
+            z-index: 1; /* 포커스 된 입력창의 테두리가 보이게 */
+            position: relative;
+        }
+        .input-group-merged .form-control-id {
+            border-bottom: 1px solid #dadada;
+        }
+
+        /* 로그인 버튼 */
         .btn-login {
             background-color: #333;
             color: white;
             border: none;
-            padding: 12px;
-            font-weight: 500;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 4px;
         }
         .btn-login:hover {
             background-color: #000;
             color: white;
         }
-        /* 소셜 로그인 스타일 */
-        .social-login hr {
-            margin: 30px 0;
+
+        /* [변경] 간편 로그인 구분선 (겹침 해결) */
+        .social-login-separator {
             position: relative;
+            text-align: center;
+            margin: 35px 0 25px 0;
         }
-        .social-text {
+        .social-login-separator hr {
+            border: 0;
+            border-top: 1px solid #dadada;
+            margin: 0;
+        }
+        .social-login-separator .separator-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: white;
+            background-color: #ffffff;
             padding: 0 15px;
             font-size: 0.85rem;
             color: #888;
         }
+
+        /* [변경] 소셜 로그인 버튼 스타일 (색감 옅게, 문구 변경) */
         .btn-social {
             width: 100%;
             margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            font-size: 0.9rem;
+            padding: 13px;
+            border-radius: 4px;
+            font-size: 0.95rem;
             display: flex;
             align-items: center;
             justify-content: center;
             text-decoration: none;
-            color: #333;
+            transition: opacity 0.2s;
         }
+        .btn-social:hover {
+            opacity: 0.8;
+        }
+        
+        /* 옅게 조정한 카카오 색상 */
+        .btn-kakao {
+            background-color: #fef01b; /* 조금 더 부드러운 노랑 */
+            color: #3c1e1e;
+            border: none;
+        }
+        
+        /* 옅게 조정한 네이버 색상 */
+        .btn-naver {
+            background-color: #1dc800; /* 조금 더 맑고 연한 초록 */
+            color: white;
+            border: none;
+        }
+
     </style>
 </head>
 <body>
@@ -94,38 +170,39 @@
     </nav>
 
     <div class="login-wrapper">
-        <div class="login-card shadow-sm">
-            <div class="text-center mb-4">
-                <h3 class="fw-bold">로그인</h3>
-                <p class="text-muted small">서연투어에 오신 것을 환영합니다</p>
-            </div>
+        <div class="login-container">
+            
+            <a href="/" class="brand-logo-inline">SEOYEON TOUR</a>
 
-            <form action="/login" method="POST">
-                <div class="mb-3">
-                    <label for="user_id" class="form-label small text-muted">아이디</label>
-                    <input type="text" class="form-control" id="user_id" name="user_id" required>
-                </div>
-                <div class="mb-4">
-                    <label for="password" class="form-label small text-muted">비밀번호</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
-                <button type="submit" class="btn btn-login w-100 mb-3">로그인</button>
-                
-                <div class="text-center">
-                    <a href="/signup-page" class="text-decoration-none small text-muted">아직 회원이 아니신가요? 회원가입</a>
-                </div>
-            </form>
+            <div class="login-card shadow-sm">
+                <form action="/login" method="POST">
+                    
+                    <div class="input-group-merged">
+                        <input type="text" class="form-control form-control-id" id="user_id" name="user_id" placeholder="아이디" required>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호" required>
+                    </div>
 
-            <div class="social-login">
-                <hr>
-                <span class="social-text">간편 로그인</span>
+                    <button type="submit" class="btn btn-login w-100 mb-3 shadow-sm">로그인</button>
+                </form>
+
+                <div class="text-center mt-2 mb-2">
+                    <span class="text-muted small">아직 계정이 없으신가요?</span>
+                    <a href="/signup-page" class="ms-2 fw-bold text-decoration-none" style="color: #0d6efd;">회원가입하기</a>
+                </div>
+
+                <div class="social-login-separator">
+                    <hr>
+                    <span class="separator-text">간편 로그인</span>
+                </div>
                 
-                <a href="#" class="btn-social" style="background-color: #FEE500; border: none;">
-                    <img src="https://developers.kakao.com/assets/img/reference/alphabets/symbol/kakao_caption.png" width="20" class="me-2"> 카카오 로그인
-                </a>
-                <a href="#" class="btn-social" style="background-color: #03C75A; color: white; border: none;">
-                    <span class="fw-bold me-2" style="font-size: 1.1rem;">N</span> 네이버 로그인
-                </a>
+                <div class="social-login-buttons">
+                    <a href="#" class="btn-social btn-kakao shadow-sm">
+                        <img src="https://developers.kakao.com/assets/img/reference/alphabets/symbol/kakao_caption.png" width="18" class="me-2"> 카카오로 로그인하기
+                    </a>
+                    <a href="#" class="btn-social btn-naver shadow-sm">
+                        <span class="fw-bold me-2" style="font-size: 1.1rem;">N</span> 네이버로 로그인하기
+                    </a>
+                </div>
             </div>
         </div>
     </div>
@@ -137,6 +214,6 @@
         사업자 대표: 원서연,정유진
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

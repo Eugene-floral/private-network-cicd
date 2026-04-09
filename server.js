@@ -20,6 +20,9 @@ cookie: {maxAge:3600000}
 }
 )
 );
+const passport = require('passport');
+app.use(passport.initialize());
+app.use(passport.session());
 
 const authRouter = require('./auth')(db);
 app.use('/auth' ,authRouter);

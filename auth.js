@@ -8,7 +8,7 @@ module.exports = (db) => {
         const { id, pw } = req.body;
         const sql = "SELECT * FROM users WHERE user_id = ?";
 
-        db.query(sql, [id], (err, results) => {
+        db.query(sql, [id], async(err, results) => {
             if (err) return res.status(500).send("데이터베이스 오류");
 
 

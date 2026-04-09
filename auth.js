@@ -6,24 +6,22 @@ const NaverStrategy = require('passport-naver-v2').Strategy;
 
 module.exports = (db) => {
 
-        passport.use(new NaverStrategy({
+    // 네이버 전략 설정
+    passport.use(new NaverStrategy({
         clientID: '_nLLf4J5_C4sEy37BMAH',
         clientSecret: 'BtF6Ouc_la',
         callbackURL: 'http://localhost:5000/auth/naver/callback'
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
-            // DB에서 네이버 유저 조회
             const [results] = await db.execute(
                 'SELECT * FROM users WHERE user_id = ?',
                 ['naver_' + profile.id]
             );
 
             if (results.length > 0) {
-                // 이미 가입된 유저
                 return done(null, results[0]);
             } else {
-                // 신규 유저 → DB에 저장
                 await db.execute(
                     'INSERT INTO users (user_id, password, name, email) VALUES (?, ?, ?, ?)',
                     ['naver_' + profile.id, 'social_login', profile.displayName, profile.email || '']
@@ -69,13 +67,15 @@ module.exports = (db) => {
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     req.session.user = user;
-                    console.log("세션 저장:", req.session.user);
-    			req.session.save((err) => {
-        	if (err) {
-            		console.error("세션 저장 에러:", err);
-       	 		}
-       		 	console.log("세션 저장 완료");
-			return res.send("<script>alert('반갑습니다, " + user.name + "님!'); location.href='/';</script>");
+                    console.log("세션 저장:", req.session.user.name);
+                    req.session.save((err) => {
+                        if (err) {
+                            console.error("세션 저장 에러:", err);
+                            return res.status(500).send("세션 오류");
+                        }
+                        console.log("세션 저장 완료");
+                        return res.send("<script>alert('반갑습니다, " + user.name + "님!'); location.href='/';</script>");
+                    });
                 } else {
                     return res.send("<script>alert('아이디 또는 비밀번호가 틀렸습니다.'); history.back();</script>");
                 }

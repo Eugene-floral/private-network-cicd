@@ -69,7 +69,13 @@ module.exports = (db) => {
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     req.session.user = user;
-                    return res.send("<script>alert('반갑습니다, " + user.name + "님!'); location.href='/';</script>");
+                    console.log("세션 저장:", req.session.user);
+    			req.session.save((err) => {
+        	if (err) {
+            		console.error("세션 저장 에러:", err);
+       	 		}
+       		 	console.log("세션 저장 완료");
+			return res.send("<script>alert('반갑습니다, " + user.name + "님!'); location.href='/';</script>");
                 } else {
                     return res.send("<script>alert('아이디 또는 비밀번호가 틀렸습니다.'); history.back();</script>");
                 }

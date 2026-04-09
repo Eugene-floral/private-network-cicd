@@ -1,22 +1,36 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
 
 module.exports = (db) => {
     // [로그인 처리]
     router.post('/login', (req, res) => {
         const { id, pw } = req.body;
-        const sql = "SELECT * FROM user WHERE id = ? AND pw = ?";
+        const sql = "SELECT * FROM users WHERE id = ? AND pw = ?";
 
         db.query(sql, [id, pw], (err, results) => {
             if (err) return res.status(500).send("데이터베이스 오류");
 
+
             if (results.length > 0) {
-                // 세션에 유저 정보 저장 (로그인 유지용)
-                req.session.user = results[0]; 
-                res.send("<script>alert('반갑습니다, " + results[0].name + "님!'); location.href='/';</script>");
-            } else {
-                res.send("<script>alert('아이디 또는 비밀번호가 틀렸습니다.'); history.back();</script>");
-            }
+		const user = results[0];
+
+		try{
+
+			const match = await bcypt.compare(pw, user.password);
+			if(match){
+               			req.session.user = user;
+                		return res.send("<script>alert('반갑습니다, " + results[0].name + "님!'); location.href='/';</script>");
+            		} else 	{
+               			return res.send("<script>alert('아이디 또는 비밀번호가 틀렸습니다.'); history.back();</script>");
+            		}
+		} catch (compareErr) {
+			console.error("비교에러" ,compareErr);
+			return re.status(500).send("서버오류");
+		}
+	    } else {
+			res.send("<script>alert('id not found'); history.back();</script>");
+		}
         });
     });
 

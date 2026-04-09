@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 
+
+
 module.exports = (db) => {
 
     router.post('/login', (req, res) => {
@@ -17,7 +19,7 @@ module.exports = (db) => {
 
 		try{
 
-			const match = await bcypt.compare(pw, user.password);
+			const match = await bcrypt.compare(pw, user.password);
 			if(match){
                			req.session.user = user;
                 		return res.send("<script>alert('반갑습니다, " + results[0].name + "님!'); location.href='/';</script>");
@@ -26,7 +28,7 @@ module.exports = (db) => {
             		}
 		} catch (compareErr) {
 			console.error("비교에러" ,compareErr);
-			return re.status(500).send("서버오류");
+			return res.status(500).send("서버오류");
 		}
 	    } else {
 			res.send("<script>alert('id not found'); history.back();</script>");

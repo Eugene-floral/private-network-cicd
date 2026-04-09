@@ -20,7 +20,7 @@ resave:true,
 saveUninitialized: true,
 cookie: {maxAge:3600000}
 secure: false,
-httpOnly: false;
+httpOnly: false
 }
 )
 );

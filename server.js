@@ -20,8 +20,8 @@ secret:'ghdrldud10',
 resave:false,
 saveUninitialized: false,
 cookie: {
-maxAge:3600000
-sameSite: 'lax',
+maxAge:360000,
+sameSite: 'lax'
 
 }
 			

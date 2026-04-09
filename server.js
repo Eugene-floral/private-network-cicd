@@ -1,14 +1,28 @@
 const express = require('express');
+const PORT = 5000;
 const app = express();
 const path = require('path');
 const db = require('./db');
 const bcrypt = require('bcrypt');
+const session =  require('express-session');
+const authRouter = require('./auth')(db);
+
 
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+app.use(session(
+{
+secret:'ghdrldud10',
+resave:false,
+saveUninitialized: true,
+cookie: {maxAge:3600000}
+}
+)
+);
+app.use('/auth' ,authRouter);
 
-const PORT = 5000;
+
 
 // 라우터 설정 (각각 }); 로 정확히 닫아주어야 합니다)
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'index.html')); });

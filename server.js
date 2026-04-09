@@ -2,6 +2,7 @@ const express = require('express');
 const PORT = 5000;
 const app = express();
 const path = require('path');
+app.set('trust proxy', 1);
 const db = require('./db');
 const bcrypt = require('bcrypt');
 const session =  require('express-session');

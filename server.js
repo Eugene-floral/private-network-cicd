@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(session(
 {
 secret:'ghdrldud10',
-resave:false,
+resave:true,
 saveUninitialized: true,
 cookie: {maxAge:3600000}
 }

@@ -5,12 +5,12 @@ const path = require('path');
 const db = require('./db');
 const bcrypt = require('bcrypt');
 const session =  require('express-session');
-const authRouter = require('./auth')(db);
 
 
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
+
 app.use(session(
 {
 secret:'ghdrldud10',
@@ -20,6 +20,8 @@ cookie: {maxAge:3600000}
 }
 )
 );
+
+const authRouter = require('./auth')(db);
 app.use('/auth' ,authRouter);
 
 

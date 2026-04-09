@@ -7,10 +7,10 @@ const bcrypt = require('bcrypt');
 module.exports = (db) => {
 
     router.post('/login', (req, res) => {
-        const { id, pw } = req.body;
+        const {user_id, password } = req.body;
         const sql = "SELECT * FROM users WHERE user_id = ?";
 
-        db.query(sql, [id], async(err, results) => {
+        db.query(sql, [user_id], async(err, results) => {
             if (err) return res.status(500).send("데이터베이스 오류");
 
 
@@ -19,7 +19,7 @@ module.exports = (db) => {
 
 		try{
 
-			const match = await bcrypt.compare(pw, user.password);
+			const match = await bcrypt.compare(password, user.password);
 			if(match){
                			req.session.user = user;
                 		return res.send("<script>alert('반갑습니다, " + results[0].name + "님!'); location.href='/';</script>");

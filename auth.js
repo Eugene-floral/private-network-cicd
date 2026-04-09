@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 module.exports = (db) => {
 
     router.post('/login', (req, res) => {
+	console.log("로그인 요청 왔음", req.body);
         const {user_id, password } = req.body;
         const sql = "SELECT * FROM users WHERE user_id = ?";
 

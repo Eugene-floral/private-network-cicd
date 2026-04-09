@@ -3,12 +3,12 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 
 module.exports = (db) => {
-    // [로그인 처리]
+
     router.post('/login', (req, res) => {
         const { id, pw } = req.body;
-        const sql = "SELECT * FROM users WHERE id = ? AND pw = ?";
+        const sql = "SELECT * FROM users WHERE user_id = ?";
 
-        db.query(sql, [id, pw], (err, results) => {
+        db.query(sql, [id], (err, results) => {
             if (err) return res.status(500).send("데이터베이스 오류");
 
 

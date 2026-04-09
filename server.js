@@ -21,7 +21,7 @@ resave:false,
 saveUninitialized: false,
 cookie: {
 maxAge:360000,
-sameSite: 'lax'
+sameSite: 'lax',
 domain: '15.135.84.253'
 }
 			

@@ -41,6 +41,29 @@ app.get('/group', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'g
 app.get('/package', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'package.html')); });
 app.get('/signup-page', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'signup.html')); });
 app.get('/login', (req,res) => { res.sendFile(path.join(__dirname,'/views','login.html'));});
+app.get('/mypage', async (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/login');
+    }
+    try {
+        const user_num = req.session.user.user_num;
+
+        const [payments] = await db.execute(
+            `SELECT paid_at, amount 
+             FROM payments 
+             WHERE user_num = ?`,
+            [user_num]
+        );
+
+        res.render('mypage', {
+            user: req.session.user,
+            payments: payments
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("서버 오류");
+    }
+});
 
 // 상세 페이지
 app.get('/honeymoon-europe/paris', (req, res) => { res.sendFile(path.join(__dirname, '/views/detail', 'paris.html')); });

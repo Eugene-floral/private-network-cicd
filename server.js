@@ -19,7 +19,7 @@ secret:'ghdrldud10',
 resave:true,
 saveUninitialized: true,
 cookie: {maxAge:3600000}
-secure: false;
+secure: false,
 httpOnly: false;
 }
 )

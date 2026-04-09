@@ -6,6 +6,8 @@ const db = require('./db');
 const bcrypt = require('bcrypt');
 const session =  require('express-session');
 
+app.set('view engine' , 'ejs');
+app.set('views',path.join(__dirname, '/views'));
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -30,7 +32,7 @@ app.use('/auth' ,authRouter);
 
 
 // 라우터 설정 (각각 }); 로 정확히 닫아주어야 합니다)
-app.get('/', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'index.html')); });
+app.get('/', (req, res) => { res.render('index', {user:req.session.user || null}); });
 app.get('/introduce', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'introduce.html')); });
 app.get('/event', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'event.html')); });
 app.get('/honeymoon-resort', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'honeymoon-resort.html')); });

@@ -22,7 +22,7 @@ saveUninitialized: false,
 cookie: {
 maxAge:360000,
 sameSite: 'lax',
-domain: '15.135.84.253'
+domain: 'eugene.io.kr'
 }
 			
 }

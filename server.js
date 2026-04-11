@@ -6,7 +6,14 @@ app.set('trust proxy', 1);
 const db = require('./db');
 const bcrypt = require('bcrypt');
 const session =  require('express-session');
+const MYSQLStore = require('express-mysql-session')(session);
 
+const sessionStore = new MYSQLStore({
+	expiration: 3600000,
+	createDatabaseTable: true,
+	clearExpired: true,
+	checkExpirationInterval: 900000
+}, db);
 app.set('view engine' , 'ejs');
 app.set('views',path.join(__dirname, '/views'));
 
@@ -19,11 +26,13 @@ app.use(session(
 secret:'ghdrldud10',
 resave:false,
 saveUninitialized: false,
+store: sessionStore,
 cookie: {
-maxAge:3600000,
-sameSite: 'lax',
-domain: 'eugene.io.kr',
-secure: true
+	maxAge:3600000,
+	sameSite: 'lax',
+	domain: 'eugene.io.kr',
+	secure: true
+	
 }
 			
 }

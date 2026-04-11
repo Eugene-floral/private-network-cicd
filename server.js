@@ -20,7 +20,7 @@ secret:'ghdrldud10',
 resave:false,
 saveUninitialized: false,
 cookie: {
-maxAge:360000,
+maxAge:3600000,
 sameSite: 'lax',
 domain: 'eugene.io.kr',
 secure: true

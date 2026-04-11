@@ -56,12 +56,13 @@ app.get('/mypage', async (req, res) => {
         const user_num = req.session.user.user_num;
 
         const [payments] = await db.execute(
-            `SELECT paid_at, amount 
-             FROM payments 
-             WHERE user_num = ?`,
-            [user_num]
-        );
-
+  		`SELECT p.paid_at, p.pay_method, p.payment_status,
+        		  o.total_price, o.quantity
+   		FROM payments p
+   		JOIN orders o ON p.order_id = o.order_id
+   		WHERE p.user_num = ?`,
+  			[user_num]
+		);
         res.render('mypage', {
             user: req.session.user,
             payments: payments

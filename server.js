@@ -23,6 +23,7 @@ cookie: {
 maxAge:360000,
 sameSite: 'lax',
 domain: 'eugene.io.kr'
+secure: true
 }
 			
 }

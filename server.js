@@ -47,12 +47,13 @@ app.use('/auth' ,authRouter);
 
 
 
-// 라우터 설정 (각각 }); 로 정확히 닫아주어야 합니다)
 app.get('/', (req, res) => { res.render('index', {user:req.session.user || null}); });
 app.get('/introduce', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'introduce.html')); });
 app.get('/event', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'event.html')); });
 app.get('/honeymoon-resort', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'honeymoon-resort.html')); });
-app.get('/honeymoon-europe', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'honeymoon-europe.html')); });
+
+app.get('/honeymoon-europe', (req, res) => { res.render('honeymoon-europe', user: req.session.user || null }); });
+
 app.get('/group', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'group.html')); });
 app.get('/package', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'package.html')); });
 app.get('/signup-page', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'signup.html')); });

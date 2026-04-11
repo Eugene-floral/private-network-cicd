@@ -5,23 +5,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>마이페이지 | Seoyeon Tour</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Sans KR', sans-serif; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Noto Sans KR', sans-serif; background: #f8f7f4; }
+
         .nav-link { color: #555 !important; font-size: 0.9rem; }
         .nav-link:hover { color: #000 !important; }
+
         .mypage-header {
-            background-color: #1a1a2e;
-            height: 200px;
+            position: relative;
+            height: 320px;
+            background-image: url('/images/mypagewall.jpg');
+            background-size: cover;
+            background-position: center;
+            margin-top: 56px;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: flex-start;
+            justify-content: flex-start;
+            overflow: hidden;
         }
+        .mypage-header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom right,
+                rgba(0,0,0,0.45) 0%,
+                rgba(0,0,0,0.15) 100%
+            );
+        }
+        .mypage-header-text {
+            position: relative;
+            z-index: 2;
+            padding: 48px 56px;
+        }
+        .mypage-header-text .label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            letter-spacing: 6px;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+        .mypage-header-text h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 400;
+            color: #fff;
+            margin: 0;
+            line-height: 1.2;
+        }
+
         .info-card {
             border: none;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+            border-radius: 16px;
+            background: #fff;
         }
+        .section-label {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            color: #aaa;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 500;
+            color: #1a1a2e;
+            margin-bottom: 24px;
+        }
+        .info-table td {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+        }
+        .info-table td:first-child {
+            color: #888;
+            width: 90px;
+            font-size: 0.82rem;
+        }
+        .info-table tr:last-child td { border-bottom: none; }
+
+        .payment-table th {
+            font-size: 0.8rem;
+            color: #aaa;
+            font-weight: 400;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+        }
+        .payment-table td {
+            font-size: 0.88rem;
+            color: #444;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        .btn-logout {
+            border: 1px solid #ddd;
+            color: #888;
+            background: transparent;
+            font-size: 0.82rem;
+            padding: 8px 20px;
+            border-radius: 30px;
+            transition: all 0.2s;
+        }
+        .btn-logout:hover { border-color: #c0392b; color: #c0392b; }
     </style>
 </head>
 <body>
@@ -44,21 +134,16 @@
                 <li class="nav-item">
                     <a class="nav-link fw-bold text-dark" href="/mypage"><%= user.name %>님</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/mypage">마이페이지</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-danger" href="/auth/logout">로그아웃</a>
-                </li>
+                <li class="nav-item"><a class="nav-link active" href="/mypage">마이페이지</a></li>
+                <li class="nav-item"><a class="nav-link text-danger" href="/auth/logout">로그아웃</a></li>
             </ul>
         </div>
     </nav>
 
-    <!-- 헤더 -->
-    <div class="mypage-header mt-5">
-        <div class="text-center text-white">
-            <p class="small mb-1" style="letter-spacing: 4px; opacity: 0.7;">MY PAGE</p>
-            <h2 class="fw-light"><%= user.name %>님 안녕하세요</h2>
+    <div class="mypage-header">
+        <div class="mypage-header-text">
+            <p class="label">My Page</p>
+            <h2><%= user.name %>님,<br>안녕하세요</h2>
         </div>
     </div>
 
@@ -66,61 +151,50 @@
         <div class="container py-3">
             <div class="row g-4">
 
-                <!-- 내 정보 -->
                 <div class="col-md-4">
-                    <div class="card info-card p-4">
-                        <p class="text-muted small mb-3" style="letter-spacing: 2px;">MY INFO</p>
-                        <h5 class="fw-medium mb-4">내 정보</h5>
-                        <table class="table table-borderless text-muted small">
-                            <tr>
-                                <td class="fw-medium text-dark">이름</td>
-                                <td><%= user.name %></td>
-                            </tr>
-                            <tr>
-                                <td class="fw-medium text-dark">아이디</td>
-                                <td><%= user.user_id %></td>
-                            </tr>
-                            <tr>
-                                <td class="fw-medium text-dark">이메일</td>
-                                <td><%= user.email %></td>
-                            </tr>
-                            <tr>
-                                <td class="fw-medium text-dark">전화번호</td>
-                                <td><%= user.phonenum %></td>
-                            </tr>
-                            <tr>
-                                <td class="fw-medium text-dark">주소</td>
-                                <td><%= user.address %></td>
-                            </tr>
+                    <div class="info-card p-4">
+                        <p class="section-label">My Info</p>
+                        <h5 class="section-title">내 정보</h5>
+                        <table class="table table-borderless info-table">
+                            <tr><td>이름</td><td><%= user.name %></td></tr>
+                            <tr><td>아이디</td><td><%= user.user_id %></td></tr>
+                            <tr><td>이메일</td><td><%= user.email || '-' %></td></tr>
+                            <tr><td>전화번호</td><td><%= user.phonenum || '-' %></td></tr>
+                            <tr><td>주소</td><td><%= user.address || '-' %></td></tr>
                         </table>
-                        <a href="/auth/logout" class="btn btn-outline-danger btn-sm mt-3">로그아웃</a>
+                        <a href="/auth/logout" class="btn btn-logout mt-3 w-100">로그아웃</a>
                     </div>
                 </div>
 
-                <!-- 결제 내역 -->
                 <div class="col-md-8">
-                    <div class="card info-card p-4">
-                        <p class="text-muted small mb-3" style="letter-spacing: 2px;">MY PAYMENTS</p>
-                        <h5 class="fw-medium mb-4">결제 내역</h5>
+                    <div class="info-card p-4">
+                        <p class="section-label">My Payments</p>
+                        <h5 class="section-title">결제 내역</h5>
                         <% if (payments.length > 0) { %>
-                            <table class="table text-muted small">
+                            <table class="table payment-table">
                                 <thead>
                                     <tr>
                                         <th>결제일</th>
+                                        <th>결제 수단</th>
+                                        <th>상태</th>
+                                        <th>수량</th>
                                         <th>총 금액</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <% payments.forEach(payment => { %>
                                     <tr>
-                                        <td><%= new Date(payment.paid_at).toLocaleDateString() %></td>
-                                        <td><%= payment.amount ? payment.amount.toLocaleString() : '-' %>원</td>
+                                        <td><%= new Date(payment.paid_at).toLocaleDateString('ko-KR') %></td>
+                                        <td><%= payment.pay_method || '-' %></td>
+                                        <td><%= payment.payment_status || '-' %></td>
+                                        <td><%= payment.quantity || '-' %></td>
+                                        <td><%= payment.total_price ? Number(payment.total_price).toLocaleString() : '-' %>원</td>
                                     </tr>
                                     <% }) %>
                                 </tbody>
                             </table>
                         <% } else { %>
-                            <p class="text-muted text-center py-4">결제 내역이 없습니다.</p>
+                            <p class="text-muted text-center py-5" style="font-size:0.9rem;">결제 내역이 없습니다.</p>
                         <% } %>
                     </div>
                 </div>

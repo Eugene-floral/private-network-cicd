@@ -103,36 +103,18 @@
     <section class="py-5">
         <div class="container py-3">
             <div class="row g-4 justify-content-center">
+                <% products.forEach(product => { %>
                 <div class="col-md-4">
                     <div class="card shadow-sm">
-                        <img src="/images/australia.jpg" class="card-img-top" alt="호주">
+                        <img src="/images/<%= product.image %>" class="card-img-top" alt="<%= product.product_name %>">
                         <div class="card-body text-center p-4">
-                            <p class="text-muted small mb-1">AUSTRALIA</p>
-                            <h5 class="fw-medium mb-3">호주</h5>
-                            <a href="/honeymoon-resort/australia" class="btn btn-outline-dark btn-sm px-4">자세히 보기</a>
+                            <p class="text-muted small mb-1"><%= product.destination %></p>
+                            <h5 class="fw-medium mb-3"><%= product.product_name %></h5>
+                            <a href="/product/<%= product.product_id %>" class="btn btn-outline-dark btn-sm px-4">자세히 보기</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <img src="/images/mauritius.jpg" class="card-img-top" alt="모리셔스">
-                        <div class="card-body text-center p-4">
-                            <p class="text-muted small mb-1">MAURITIUS</p>
-                            <h5 class="fw-medium mb-3">모리셔스</h5>
-                            <a href="/honeymoon-resort/mauritius" class="btn btn-outline-dark btn-sm px-4">자세히 보기</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <img src="/images/koh-samui.jpg" class="card-img-top" alt="코사무이">
-                        <div class="card-body text-center p-4">
-                            <p class="text-muted small mb-1">KOH SAMUI, THAILAND</p>
-                            <h5 class="fw-medium mb-3">코사무이</h5>
-                            <a href="/honeymoon-resort/koh-samui" class="btn btn-outline-dark btn-sm px-4">자세히 보기</a>
-                        </div>
-                    </div>
-                </div>
+                <% }) %>
             </div>
         </div>
     </section>

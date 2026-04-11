@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>허니문-유럽 | Seoyeon Tour</title>
+    <title>이벤트 | Seoyeon Tour</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
@@ -52,9 +52,35 @@
         }
         .nav-link { color: #555 !important; font-size: 0.9rem; }
         .nav-link:hover { color: #000 !important; }
-        .card-img-top { height: 250px; object-fit: cover; }
-        .card { transition: transform 0.3s; border: none; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+        .event-card {
+            border: none;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+        }
+        .event-card:hover { transform: translateY(-5px); }
+        .event-card img { height: 280px; object-fit: cover; width: 100%; }
+        .discount-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #c0392b;
+            color: #fff;
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 30px;
+        }
+        .dday-badge {
+            background: #1a1a2e;
+            color: #fff;
+            font-size: 0.78rem;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -67,8 +93,8 @@
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ms-auto gap-2">
                 <li class="nav-item"><a class="nav-link" href="/introduce">소개</a></li>
-                <li class="nav-item"><a class="nav-link" href="/event">이벤트</a></li>
-                <li class="nav-item"><a class="nav-link active fw-bold text-dark" href="/honeymoon-europe">허니문-유럽</a></li>
+                <li class="nav-item"><a class="nav-link active fw-bold text-dark" href="/event">이벤트</a></li>
+                <li class="nav-item"><a class="nav-link" href="/honeymoon-europe">허니문-유럽</a></li>
                 <li class="nav-item"><a class="nav-link" href="/honeymoon-resort">허니문-휴양지</a></li>
                 <li class="nav-item"><a class="nav-link" href="/group">단체여행</a></li>
                 <li class="nav-item"><a class="nav-link" href="/package">패키지</a></li>
@@ -89,33 +115,58 @@
     <div class="page-header mt-5">
         <div style="position: relative; z-index: 1;">
             <p class="text-white small mb-2" style="letter-spacing: 6px; opacity: 0.8;">SEOYEON TOUR</p>
-            <h2 class="text-white fw-normal mb-0">Honeymoon to Europe</h2>
+            <h2 class="text-white fw-normal mb-0">Event Product</h2>
         </div>
     </div>
 
     <div class="bg-dark py-2 px-4">
         <ol class="breadcrumb mb-0">
             <li class="breadcrumb-item"><a href="/" class="text-white text-decoration-none">🏠</a></li>
-            <li class="breadcrumb-item text-white-50 active">허니문-유럽</li>
+            <li class="breadcrumb-item text-white-50 active">이벤트</li>
         </ol>
     </div>
 
     <section class="py-5">
         <div class="container py-3">
+            <% if (events.length > 0) { %>
             <div class="row g-4 justify-content-center">
-                <% products.forEach(product => { %>
-                <div class="col-md-4">
-                    <div class="card shadow-sm">
-                        <img src="/images/<%= product.image %>" class="card-img-top" alt="<%= product.product_name %>">
-                        <div class="card-body text-center p-4">
-                            <p class="text-muted small mb-1"><%= product.destination %></p>
-                            <h5 class="fw-medium mb-3"><%= product.product_name %></h5>
-                            <a href="/product/<%= product.product_id %>" class="btn btn-outline-dark btn-sm px-4">자세히 보기</a>
+                <% events.forEach(event => { %>
+                <% const today = new Date(); %>
+                <% const endDate = new Date(event.end_date); %>
+                <% const dday = Math.ceil((endDate - today) / (1000 * 60 * 60 * 24)); %>
+                <div class="col-md-5">
+                    <div class="event-card">
+                        <div style="position: relative;">
+                            <img src="/images/<%= event.image %>" alt="<%= event.title %>">
+                            <span class="discount-badge">
+                                <% if (event.discount_type === 'percent') { %>
+                                    <%= event.discount_value %>% 할인
+                                <% } else { %>
+                                    <%= Number(event.discount_value).toLocaleString() %>원 할인
+                                <% } %>
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <% if (dday > 0) { %>
+                                <span class="dday-badge">D-<%= dday %></span>
+                            <% } else { %>
+                                <span class="dday-badge" style="background:#888;">종료</span>
+                            <% } %>
+                            <h5 class="fw-medium mb-2"><%= event.title %></h5>
+                            <p class="text-muted small mb-2"><%= event.description %></p>
+                            <p class="text-muted small mb-3">
+                                <%= new Date(event.start_date).toLocaleDateString('ko-KR') %> ~
+                                <%= new Date(event.end_date).toLocaleDateString('ko-KR') %>
+                            </p>
+                            <a href="/contact" class="btn btn-dark btn-sm px-4">문의하기</a>
                         </div>
                     </div>
                 </div>
                 <% }) %>
             </div>
+            <% } else { %>
+            <p class="text-center text-muted py-5">진행 중인 이벤트가 없습니다.</p>
+            <% } %>
         </div>
     </section>
 

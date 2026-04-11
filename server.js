@@ -5,93 +5,141 @@ const path = require('path');
 app.set('trust proxy', 1);
 const db = require('./db');
 const bcrypt = require('bcrypt');
-const session =  require('express-session');
+const session = require('express-session');
 const MYSQLStore = require('express-mysql-session')(session);
 
 const sessionStore = new MYSQLStore({
-	expiration: 3600000,
-	createDatabaseTable: true,
-	clearExpired: true,
-	checkExpirationInterval: 900000
+    expiration: 3600000,
+    createDatabaseTable: true,
+    clearExpired: true,
+    checkExpirationInterval: 900000
 }, db);
-app.set('view engine' , 'ejs');
-app.set('views',path.join(__dirname, '/views'));
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, '/views'));
 
 app.use(express.json());
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 
-app.use(session(
-{
-secret:'ghdrldud10',
-resave:false,
-saveUninitialized: false,
-store: sessionStore,
-cookie: {
-	maxAge:3600000,
-	sameSite: 'lax',
-	domain: 'eugene.io.kr',
-	secure: true
-	
-}
-			
-}
-)
-);
+app.use(session({
+    secret: 'ghdrldud10',
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+        maxAge: 3600000,
+        sameSite: 'lax',
+        domain: 'eugene.io.kr',
+        secure: true
+    }
+}));
+
 const passport = require('passport');
 app.use(passport.initialize());
 app.use(passport.session());
 
 const authRouter = require('./auth')(db);
-app.use('/auth' ,authRouter);
+app.use('/auth', authRouter);
 
+const adminRouter = require('./admin')(db);
+app.use('/admin', adminRouter);
 
+app.get('/', (req, res) => {
+    res.render('index', { user: req.session.user || null });
+});
 
-app.get('/', (req, res) => { res.render('index', {user:req.session.user || null}); });
-app.get('/introduce', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'introduce.html')); });
-app.get('/event', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'event.html')); });
-app.get('/honeymoon-resort', (req, res) => { res.render('honeymoon-resort', {user : req.session.user || null }); });
+app.get('/introduce', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views', 'introduce.html'));
+});
 
-app.get('/honeymoon-europe', (req, res) => { res.render('honeymoon-europe', { user: req.session.user || null }) });
+app.get('/event', async (req, res) => {
+    const [events] = await db.execute('SELECT * FROM events ORDER BY start_date DESC');
+    res.render('event', { user: req.session.user || null, events });
+});
 
-app.get('/group', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'group.html')); });
-app.get('/package', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'package.html')); });
-app.get('/signup-page', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'signup.html')); });
-app.get('/login', (req,res) => { res.sendFile(path.join(__dirname,'/views','login.html'));});
+app.get('/honeymoon-europe', async (req, res) => {
+    const [products] = await db.execute(
+        "SELECT * FROM products WHERE category = 'honeymoon-europe' AND availability = 1"
+    );
+    res.render('honeymoon-europe', { user: req.session.user || null, products });
+});
+
+app.get('/honeymoon-resort', async (req, res) => {
+    const [products] = await db.execute(
+        "SELECT * FROM products WHERE category = 'honeymoon-resort' AND availability = 1"
+    );
+    res.render('honeymoon-resort', { user: req.session.user || null, products });
+});
+
+app.get('/group', async (req, res) => {
+    const [products] = await db.execute(
+        "SELECT * FROM products WHERE category = 'group' AND availability = 1"
+    );
+    res.render('group', { user: req.session.user || null, products });
+});
+
+app.get('/package', async (req, res) => {
+    const [products] = await db.execute(
+        "SELECT * FROM products WHERE category = 'package' AND availability = 1"
+    );
+    res.render('package', { user: req.session.user || null, products });
+});
+
+app.get('/reviews', async (req, res) => {
+    const [reviews] = await db.execute(
+        `SELECT r.*, u.name, p.product_name
+         FROM reviews r
+         JOIN users u ON r.user_num = u.user_num
+         JOIN payments pay ON r.payment_id = pay.payment_id
+         JOIN orders o ON pay.order_id = o.order_id
+         JOIN products p ON o.product_id = p.product_id
+         ORDER BY r.reviewed_at DESC`
+    );
+    res.render('reviews', { user: req.session.user || null, reviews });
+});
+
+app.get('/contact', (req, res) => {
+    res.render('contact', { user: req.session.user || null });
+});
+
+app.get('/signup-page', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views', 'signup.html'));
+});
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, '/views', 'login.html'));
+});
+
 app.get('/mypage', async (req, res) => {
-    if (!req.session.user) {
-        return res.redirect('/login');
-    }
+    if (!req.session.user) return res.redirect('/login');
     try {
         const user_num = req.session.user.user_num;
-
         const [payments] = await db.execute(
-  		`SELECT p.paid_at, p.pay_method, p.payment_status,
-        		  o.total_price, o.quantity
-   		FROM payments p
-   		JOIN orders o ON p.order_id = o.order_id
-   		WHERE p.user_num = ?`,
-  			[user_num]
-		);
-        res.render('mypage', {
-            user: req.session.user,
-            payments: payments
-        });
+            `SELECT p.paid_at, p.pay_method, p.payment_status,
+                    o.total_price, o.quantity
+             FROM payments p
+             JOIN orders o ON p.order_id = o.order_id
+             WHERE p.user_num = ?`,
+            [user_num]
+        );
+        res.render('mypage', { user: req.session.user, payments });
     } catch (err) {
         console.error(err);
         res.status(500).send("서버 오류");
     }
 });
 
-// 상세 페이지
-app.get('/honeymoon-europe/paris', (req, res) => { res.sendFile(path.join(__dirname, '/views/detail', 'paris.html')); });
-app.get('/honeymoon-europe/venice', (req, res) => { res.sendFile(path.join(__dirname, '/views/detail', 'venice.html')); });
-app.get('/honeymoon-europe/portugal', (req, res) => { res.sendFile(path.join(__dirname, '/views/detail', 'portugal.html')); });
-app.get('/honeymoon-resort/australia', (req, res) => { res.sendFile(path.join(__dirname, '/views/detail', 'australia.html')); });
-app.get('/honeymoon-resort/mauritius', (req, res) => { res.sendFile(path.join(__dirname, '/views/detail', 'mauritius.html')); });
-app.get('/honeymoon-resort/koh-samui', (req, res) => { res.sendFile(path.join(__dirname, '/views/detail', 'koh-samui.html')); });
+app.get('/product/:product_id', async (req, res) => {
+    const { product_id } = req.params;
+    const [results] = await db.execute(
+        "SELECT * FROM products WHERE product_id = ?",
+        [product_id]
+    );
+    if (results.length === 0) return res.status(404).send('상품을 찾을 수 없습니다.');
+    res.render('detail', { user: req.session.user || null, product: results[0] });
+});
 
-// 회원가입
 app.post('/signup', async (req, res) => {
     try {
         const { user_id, password, name, gender, birth_date, email, phonenum, address } = req.body;
@@ -107,7 +155,6 @@ app.post('/signup', async (req, res) => {
     }
 });
 
-// 서버 대기
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

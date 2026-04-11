@@ -50,7 +50,7 @@ app.use('/auth' ,authRouter);
 app.get('/', (req, res) => { res.render('index', {user:req.session.user || null}); });
 app.get('/introduce', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'introduce.html')); });
 app.get('/event', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'event.html')); });
-app.get('/honeymoon-resort', (req, res) => { res.sendFile(path.join(__dirname, '/views', 'honeymoon-resort.html')); });
+app.get('/honeymoon-resort', (req, res) => { res.render('honeymoon-resort', {user : req.session.user || null }); });
 
 app.get('/honeymoon-europe', (req, res) => { res.render('honeymoon-europe', { user: req.session.user || null }) });
 

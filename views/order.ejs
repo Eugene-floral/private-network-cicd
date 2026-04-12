@@ -194,6 +194,10 @@
         }
         initWidget();
 
-        function changeQty(delta) {
-            quantity = Math.max(1, quantity + delta);
-            document.getElementById('qty').textContent
+async function changeQty(delta) {
+    quantity = Math.max(1, quantity + delta);
+    document.getElementById('qty').textContent = quantity;
+    const total = price * quantity;
+    document.getElementById('totalPrice').textContent = total.toLocaleString() + '원';
+    await widgets.setAmount({ currency: 'KRW', value: total });
+}

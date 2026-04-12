@@ -40,24 +40,17 @@
         .info-row:last-child { border-bottom: none; }
         .info-row span:first-child { color: #888; }
         .info-row span:last-child { font-weight: 500; }
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .quantity-control button {
+        .qty-btn {
             width: 32px;
             height: 32px;
             border: 1px solid #ddd;
             background: #fff;
             border-radius: 50%;
-            font-size: 1rem;
+            font-size: 1.2rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            line-height: 1;
         }
-        .quantity-control button:hover { background: #f0f0f0; }
+        .qty-btn:hover { background: #f0f0f0; }
         .total-price {
             font-size: 1.4rem;
             font-weight: 700;
@@ -72,7 +65,6 @@
             font-size: 1rem;
             width: 100%;
             cursor: pointer;
-            transition: background 0.2s;
         }
         .btn-pay:hover { background: #2d2d4e; }
     </style>
@@ -144,10 +136,10 @@
 
                         <div class="mb-4">
                             <p class="text-muted small mb-2">인원 선택</p>
-                            <div class="quantity-control">
-                                <button id="btn-minus">−</button>
-                                <span id="qty" class="fw-medium">1</span>
-                                <button id="btn-plus">+</button>
+                            <div class="d-flex align-items-center gap-3">
+                                <button class="qty-btn" id="btn-minus">−</button>
+                                <span id="qty" style="font-size:1.1rem; font-weight:500;">1</span>
+                                <button class="qty-btn" id="btn-plus">+</button>
                                 <span class="text-muted small">명</span>
                             </div>
                         </div>
@@ -162,10 +154,9 @@
                         <div id="payment-widget"></div>
                         <div id="agreement-widget" class="mb-3"></div>
 
-                        <button id="btn-pay" class="btn-pay">결제하기</button>
+                        <button class="btn-pay" id="btn-pay">결제하기</button>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -180,52 +171,55 @@
     <script src="https://js.tosspayments.com/v2/standard"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const price = <%= product.price %>;
-            const productId = '<%= product.product_id %>';
-            const clientKey = '<%= clientKey %>';
-            let quantity = 1;
+        const price = <%= product.price %>;
+        let quantity = 1;
+        let widgets = null;
 
-            const tossPayments = TossPayments(clientKey);
-            const widgets = tossPayments.widgets({ customerKey:'USER_' + String(<%= user.user_num %>) });
+        document.getElementById('btn-minus').onclick = function() {
+            if (quantity <= 1) return;
+            quantity--;
+            document.getElementById('qty').textContent = quantity;
+            document.getElementById('totalPrice').textContent = (price * quantity).toLocaleString() + '원';
+            if (widgets) widgets.setAmount({ currency: 'KRW', value: price * quantity });
+        };
 
+        document.getElementById('btn-plus').onclick = function() {
+            quantity++;
+            document.getElementById('qty').textContent = quantity;
+            document.getElementById('totalPrice').textContent = (price * quantity).toLocaleString() + '원';
+            if (widgets) widgets.setAmount({ currency: 'KRW', value: price * quantity });
+        };
+
+        async function initToss() {
+            const tossPayments = TossPayments('<%= clientKey %>');
+            widgets = tossPayments.widgets({ customerKey: 'USER_<%= user.user_num %>' });
             await widgets.setAmount({ currency: 'KRW', value: price });
             await widgets.renderPaymentMethods({ selector: '#payment-widget', variantKey: 'DEFAULT' });
             await widgets.renderAgreement({ selector: '#agreement-widget' });
+        }
 
-            document.getElementById('btn-minus').addEventListener('click', async () => {
-                quantity = Math.max(1, quantity - 1);
-                document.getElementById('qty').textContent = quantity;
-                const total = price * quantity;
-                document.getElementById('totalPrice').textContent = total.toLocaleString() + '원';
-                await widgets.setAmount({ currency: 'KRW', value: total });
-            });
+        initToss();
 
-            document.getElementById('btn-plus').addEventListener('click', async () => {
-                quantity = quantity + 1;
-                document.getElementById('qty').textContent = quantity;
-                const total = price * quantity;
-                document.getElementById('totalPrice').textContent = total.toLocaleString() + '원';
-                await widgets.setAmount({ currency: 'KRW', value: total });
+        document.getElementById('btn-pay').onclick = async function() {
+            const total = price * quantity;
+            const res = await fetch('/order/create', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    product_id: '<%= product.product_id %>',
+                    quantity: quantity,
+                    total_price: total
+                })
             });
-
-            document.getElementById('btn-pay').addEventListener('click', async () => {
-                const total = price * quantity;
-                const res = await fetch('/order/create', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ product_id: productId, quantity, total_price: total })
-                });
-                const { order_id } = await res.json();
-                await widgets.requestPayment({
-                    orderId: order_id,
-                    orderName: '<%= product.product_name %>',
-                    customerName: '<%= user.name %>',
-                    successUrl: window.location.origin + '/order/payment/success',
-                    failUrl: window.location.origin + '/order/payment/fail'
-                });
+            const { order_id } = await res.json();
+            await widgets.requestPayment({
+                orderId: order_id,
+                orderName: '<%= product.product_name %>',
+                customerName: '<%= user.name %>',
+                successUrl: window.location.origin + '/order/payment/success',
+                failUrl: window.location.origin + '/order/payment/fail'
             });
-        });
+        };
     </script>
 </body>
 </html>

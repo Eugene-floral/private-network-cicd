@@ -7,6 +7,7 @@ const db = require('./db');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
 const MYSQLStore = require('express-mysql-session')(session);
+require('dotenv').config();
 
 const sessionStore = new MYSQLStore({
     expiration: 3600000,
@@ -44,6 +45,10 @@ app.use('/auth', authRouter);
 
 const adminRouter = require('./admin')(db);
 app.use('/admin', adminRouter);
+
+const orderRouter = require('./order')(db);
+app.use('/order', orderRouter);
+
 
 app.get('/', (req, res) => {
     res.render('index', { user: req.session.user || null });

@@ -9,6 +9,23 @@ const isAdmin = (req, res, next) => {
 
 module.exports = (db) => {
 
+
+	router.get('/', isAdmin, async (req, res) => {
+   	 const [products] = await db.execute('SELECT * FROM products');
+   	 const [events] = await db.execute('SELECT * FROM events');
+   	 const [users] = await db.execute('SELECT user_num, user_id, name, email, role FROM users');
+   	 const [payments] = await db.execute(
+       		 `SELECT pay.*, u.name, u.user_id, p.product_name, o.quantity, o.total_price
+        	 FROM payments pay
+        	 JOIN users u ON pay.user_num = u.user_num
+        	 JOIN orders o ON pay.order_id = o.order_id
+        	 JOIN products p ON o.product_id = p.product_id
+        	 ORDER BY pay.paid_at DESC`
+   		 );
+   	 res.render('admin', { user: req.session.user, products, events, users, payments });
+	});
+
+
     router.get('/', isAdmin, async (req, res) => {
         const [products] = await db.execute('SELECT * FROM products');
         const [events] = await db.execute('SELECT * FROM events');

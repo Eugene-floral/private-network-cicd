@@ -20,8 +20,7 @@ jobs:
       - name: Docker build
         run: docker build -t seoyeon-tour .
 
-      - name: start container 
-        - name: start container
+      - name: start container
         run: docker run -d --name seoyeon-tour -p 5000:5000 \
           -e TOSS_CLIENT_KEY=test_ck_pP2YxJ4K87Zb1eRbYMkJrRGZwXLO \
           -e TOSS_SECRET_KEY=test_sk_ex6BJGQOVDOvOX22l7v53W4w2zNb \

@@ -50,23 +50,14 @@ module.exports = (db) => {
     router.post('/product/add', isAdmin, upload.single('image'), async (req, res) => {
         const { category, product_name, price, destination, duration } = req.body;
         const image = req.file ? req.file.filename : '';
+        const product_id = 'P' + Date.now();
         await db.execute(
-            'INSERT INTO products (category, product_name, price, destination, duration, availability, image) VALUES (?,?,?,?,?,1,?)',
-            [category, product_name, price, destination, duration, image]
+            'INSERT INTO products (product_id, category, product_name, price, destination, duration, availability, image) VALUES (?,?,?,?,?,?,1,?)',
+            [product_id, category, product_name, price, destination, duration, image]
         );
         res.redirect('/admin');
     });
 
-router.post('/product/add', isAdmin, upload.single('image'), async (req, res) => {
-    const { category, product_name, price, destination, duration } = req.body;
-    const image = req.file ? req.file.filename : '';
-    const product_id = 'P' + Date.now();  // ← 자동 생성
-    await db.execute(
-        'INSERT INTO products (product_id, category, product_name, price, destination, duration, availability, image) VALUES (?,?,?,?,?,?,1,?)',
-        [product_id, category, product_name, price, destination, duration, image]
-    );
-    res.redirect('/admin');
-});
     router.post('/product/edit', isAdmin, upload.single('image'), async (req, res) => {
         const { product_id, category, product_name, price, destination, duration, description, highlights, included, schedule, current_image } = req.body;
         const image = req.file ? req.file.filename : current_image;

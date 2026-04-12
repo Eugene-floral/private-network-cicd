@@ -131,7 +131,7 @@ app.get('/product/:product_id', async (req, res) => {
     res.render('detail', { user: req.session.user || null, product: results[0] });
 });
 
-app.get('/payment/:payment_id', async (req, res) => {
+app.get('/payment-detail/:payment_id', async (req, res) => {
     if (!req.session.user) return res.redirect('/login');
     const { payment_id } = req.params;
     const [results] = await db.execute(

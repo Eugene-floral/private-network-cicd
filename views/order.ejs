@@ -187,7 +187,7 @@
             let quantity = 1;
 
             const tossPayments = TossPayments(clientKey);
-            const widgets = tossPayments.widgets({ customerKey: String(<%= user.user_num %>) });
+            const widgets = tossPayments.widgets({ customerKey:'USER_' + String(<%= user.user_num %>) });
 
             await widgets.setAmount({ currency: 'KRW', value: price });
             await widgets.renderPaymentMethods({ selector: '#payment-widget', variantKey: 'DEFAULT' });

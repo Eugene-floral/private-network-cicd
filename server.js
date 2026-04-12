@@ -131,6 +131,22 @@ app.get('/product/:product_id', async (req, res) => {
     res.render('detail', { user: req.session.user || null, product: results[0] });
 });
 
+app.get('/payment/:payment_id', async (req, res) => {
+    if (!req.session.user) return res.redirect('/login');
+    const { payment_id } = req.params;
+    const [results] = await db.execute(
+        `SELECT pay.*, o.quantity, o.total_price, o.ordered_at,
+                p.product_name, p.destination, p.duration, p.image, p.product_id
+         FROM payments pay
+         JOIN orders o ON pay.order_id = o.order_id
+         JOIN products p ON o.product_id = p.product_id
+         WHERE pay.payment_id = ? AND pay.user_num = ?`,
+        [payment_id, req.session.user.user_num]
+    );
+    if (results.length === 0) return res.status(404).send('결제 내역을 찾을 수 없습니다.');
+    res.render('payment-detail', { user: req.session.user, payment: results[0] });
+});
+
 app.post('/signup', async (req, res) => {
     try {
         const { user_id, password, name, gender, birth_date, email, phonenum, address } = req.body;

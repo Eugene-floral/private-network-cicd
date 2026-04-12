@@ -107,7 +107,7 @@ app.get('/mypage', async (req, res) => {
     try {
         const user_num = req.session.user.user_num;
         const [payments] = await db.execute(
-            `SELECT p.paid_at, p.pay_method, p.payment_status,
+            `SELECT p.payment_id, p.paid_at, p.pay_method, p.payment_status,
                     o.total_price, o.quantity
              FROM payments p
              JOIN orders o ON p.order_id = o.order_id

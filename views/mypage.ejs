@@ -190,7 +190,7 @@
                                 </thead>
                                 <tbody>
                                     <% payments.forEach(payment => { %>
-                                    <tr onclick="location.href='/payment/<%= payment.payment_id %>'">
+                                    <tr onclick="location.href='/payments/<%= payment.payment_id %>'">
                                         <td><%= new Date(payment.paid_at).toLocaleDateString('ko-KR') %></td>
                                         <td><%= payment.pay_method || '-' %></td>
                                         <td><%= payment.payment_status || '-' %></td>

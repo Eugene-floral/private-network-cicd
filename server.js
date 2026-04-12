@@ -121,7 +121,7 @@ app.get('/mypage', async (req, res) => {
     }
 });
 
-app.get('/product/:product_id', async (req, res) => {
+app.get('/products/:product_id', async (req, res) => {
     const { product_id } = req.params;
     const [results] = await db.execute(
         "SELECT * FROM products WHERE product_id = ?",
@@ -131,7 +131,7 @@ app.get('/product/:product_id', async (req, res) => {
     res.render('detail', { user: req.session.user || null, product: results[0] });
 });
 
-app.get('/payment-detail/:payment_id', async (req, res) => {
+app.get('/payments/:payment_id', async (req, res) => {
     if (!req.session.user) return res.redirect('/login');
     const { payment_id } = req.params;
     const [results] = await db.execute(

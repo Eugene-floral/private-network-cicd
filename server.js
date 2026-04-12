@@ -50,6 +50,9 @@ const orderRouter = require('./order')(db);
 app.use('/order', orderRouter);
 
 
+const reviewsRouter = require('./reviews')(db);
+app.use('/reviews', reviewsRouter);
+
 app.get('/', (req, res) => {
     res.render('index', { user: req.session.user || null });
 });
@@ -89,23 +92,6 @@ app.get('/package', async (req, res) => {
         "SELECT * FROM products WHERE category = 'package' AND availability = 1"
     );
     res.render('package', { user: req.session.user || null, products });
-});
-
-app.get('/reviews', async (req, res) => {
-    const [reviews] = await db.execute(
-        `SELECT r.*, u.name, p.product_name
-         FROM reviews r
-         JOIN users u ON r.user_num = u.user_num
-         JOIN payments pay ON r.payment_id = pay.payment_id
-         JOIN orders o ON pay.order_id = o.order_id
-         JOIN products p ON o.product_id = p.product_id
-         ORDER BY r.reviewed_at DESC`
-    );
-    res.render('reviews', { user: req.session.user || null, reviews });
-});
-
-app.get('/contact', (req, res) => {
-    res.render('contact', { user: req.session.user || null });
 });
 
 app.get('/signup-page', (req, res) => {

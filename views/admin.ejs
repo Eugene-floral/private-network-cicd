@@ -72,6 +72,9 @@
         .form-control, .form-select { font-size: 0.85rem; }
         .badge-admin { background: #1a1a2e; color: #fff; font-size: 0.72rem; padding: 3px 8px; border-radius: 20px; }
         .badge-user { background: #eee; color: #666; font-size: 0.72rem; padding: 3px 8px; border-radius: 20px; }
+        .badge-paid { background: #e8f5e9; color: #2e7d32; font-size: 0.72rem; padding: 3px 8px; border-radius: 20px; }
+        .badge-pending { background: #fff8e1; color: #f57f17; font-size: 0.72rem; padding: 3px 8px; border-radius: 20px; }
+        .badge-cancelled { background: #fce4ec; color: #c62828; font-size: 0.72rem; padding: 3px 8px; border-radius: 20px; }
     </style>
 </head>
 <body>
@@ -82,9 +85,10 @@
             <a class="nav-link active" href="#products">상품 관리</a>
             <a class="nav-link" href="#events">이벤트 관리</a>
             <a class="nav-link" href="#users">회원 관리</a>
+            <a class="nav-link" href="#payments">결제 관리</a>
             <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
             <a class="nav-link" href="/">홈으로</a>
-            <a class="nav-link text-danger" href="/auth/logout" style="color: rgba(255,100,100,0.8) !important;">로그아웃</a>
+            <a class="nav-link" href="/auth/logout" style="color: rgba(255,100,100,0.8) !important;">로그아웃</a>
         </nav>
     </div>
 
@@ -97,11 +101,8 @@
             </div>
         </div>
 
-        <!-- 상품 관리 -->
         <div class="section-card" id="products">
             <div class="section-title">상품 관리</div>
-
-            <!-- 상품 추가 폼 -->
             <form action="/admin/product/add" method="POST" class="row g-2 mb-4">
                 <div class="col-md-2">
                     <select name="category" class="form-select" required>
@@ -131,8 +132,6 @@
                     <button type="submit" class="btn btn-dark btn-sm w-100">추가</button>
                 </div>
             </form>
-
-            <!-- 상품 목록 -->
             <table class="table">
                 <thead>
                     <tr>
@@ -169,11 +168,8 @@
             </table>
         </div>
 
-        <!-- 이벤트 관리 -->
         <div class="section-card" id="events">
             <div class="section-title">이벤트 관리</div>
-
-            <!-- 이벤트 추가 폼 -->
             <form action="/admin/event/add" method="POST" class="row g-2 mb-4">
                 <div class="col-md-2">
                     <input type="text" name="title" class="form-control" placeholder="이벤트명" required>
@@ -194,8 +190,6 @@
                     <button type="submit" class="btn btn-dark btn-sm w-100">추가</button>
                 </div>
             </form>
-
-            <!-- 이벤트 목록 -->
             <table class="table">
                 <thead>
                     <tr>
@@ -230,7 +224,6 @@
             </table>
         </div>
 
-        <!-- 회원 관리 -->
         <div class="section-card" id="users">
             <div class="section-title">회원 관리</div>
             <table class="table">
@@ -259,6 +252,50 @@
                         </td>
                     </tr>
                     <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="section-card" id="payments">
+            <div class="section-title">결제 관리</div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>결제 ID</th>
+                        <th>회원</th>
+                        <th>상품명</th>
+                        <th>결제 수단</th>
+                        <th>수량</th>
+                        <th>총 금액</th>
+                        <th>결제일</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (payments.length > 0) { %>
+                    <% payments.forEach(pay => { %>
+                    <tr>
+                        <td><%= pay.payment_id %></td>
+                        <td><%= pay.name %> (<%= pay.user_id %>)</td>
+                        <td><%= pay.product_name %></td>
+                        <td><%= pay.pay_method || '-' %></td>
+                        <td><%= pay.quantity %>명</td>
+                        <td><%= Number(pay.total_price).toLocaleString() %>원</td>
+                        <td><%= new Date(pay.paid_at).toLocaleDateString('ko-KR') %></td>
+                        <td>
+                            <% if (pay.payment_status === 'paid') { %>
+                                <span class="badge-paid">결제 완료</span>
+                            <% } else if (pay.payment_status === 'pending') { %>
+                                <span class="badge-pending">대기중</span>
+                            <% } else { %>
+                                <span class="badge-cancelled">취소</span>
+                            <% } %>
+                        </td>
+                    </tr>
+                    <% }) %>
+                    <% } else { %>
+                    <tr><td colspan="8" class="text-center text-muted py-4">결제 내역이 없습니다.</td></tr>
+                    <% } %>
                 </tbody>
             </table>
         </div>

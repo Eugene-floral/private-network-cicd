@@ -74,7 +74,7 @@ app.get('/honeymoon-resort', async (req, res) => {
 
 app.get('/group', async (req, res) => {
     const [products] = await db.execute(
-        "SELECT * FROM products WHERE category = 'group' AND availability = 1"
+        "SELECT * FROM products WHERE category = 'group-tour' AND availability = 1"
     );
     res.render('group', { user: req.session.user || null, products });
 });

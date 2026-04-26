@@ -6,11 +6,10 @@ const NaverStrategy = require('passport-naver-v2').Strategy;
 
 module.exports = (db) => {
 
-    // 네이버 전략 설정
     passport.use(new NaverStrategy({
-        clientID: '_nLLf4J5_C4sEy37BMAH',
-        clientSecret: 'BtF6Ouc_la',
-        callbackURL: 'http://localhost:5000/auth/naver/callback'
+        clientID: process.env.NAVER_CLIENT_ID,
+        clientSecret: process.env.NAVER_CLIENT_SECRET,
+        callbackURL: process.env.NAVER_CALLBACK_URL
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
@@ -55,7 +54,6 @@ module.exports = (db) => {
 
     // [일반 로그인]
     router.post('/login', async (req, res) => {
-        console.log("로그인 요청 왔음", req.body);
         const { user_id, password } = req.body;
         const sql = "SELECT * FROM users WHERE user_id = ?";
 
@@ -67,20 +65,18 @@ module.exports = (db) => {
                 const match = await bcrypt.compare(password, user.password);
                 if (match) {
                     req.session.user = user;
-                    console.log("세션 저장:", req.session.user.name);
                     req.session.save((err) => {
                         if (err) {
                             console.error("세션 저장 에러:", err);
                             return res.status(500).send("세션 오류");
                         }
-                        console.log("세션 저장 완료");
-                        return res.send("<script>alert('반갑습니다, " + user.name + "님!'); location.href='/';</script>");
+                        return res.send(`<script>alert('반갑습니다, ${user.name}님!'); location.href='/';</script>`);
                     });
                 } else {
                     return res.send("<script>alert('아이디 또는 비밀번호가 틀렸습니다.'); history.back();</script>");
                 }
             } else {
-                return res.send("<script>alert('id not found'); history.back();</script>");
+                return res.send("<script>alert('아이디를 찾을 수 없습니다.'); history.back();</script>");
             }
         } catch (err) {
             console.error("로그인 에러:", err);
@@ -95,14 +91,25 @@ module.exports = (db) => {
         passport.authenticate('naver', { failureRedirect: '/login' }),
         (req, res) => {
             req.session.user = req.user;
-            res.redirect('/');
+            req.session.save((err) => {
+                if (err) {
+                    console.error("네이버 세션 저장 에러:", err);
+                    return res.redirect('/login');
+                }
+                res.redirect('/');
+            });
         }
     );
 
     // [로그아웃]
     router.get('/logout', (req, res) => {
-        req.session.destroy();
-        res.send("<script>alert('로그아웃 되었습니다.'); location.href='/';</script>");
+        req.session.destroy((err) => {
+            if (err) {
+                console.error("로그아웃 에러:", err);
+                return res.status(500).send("로그아웃 오류");
+            }
+            res.send("<script>alert('로그아웃 되었습니다.'); location.href='/';</script>");
+        });
     });
 
     return router;

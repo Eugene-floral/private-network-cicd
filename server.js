@@ -56,9 +56,9 @@ app.use('/reviews', reviewsRouter);
 app.get('/', (req, res) => {
     res.render('index', { user: req.session.user || null });
 });
-
 app.get('/introduce', (req, res) => {
-    res.sendFile(path.join(__dirname, '/views', 'introduce.html'));
+    const user = req.session.user || null;
+    res.render('introduce', { user });
 });
 
 app.get('/event', async (req, res) => {

@@ -59,7 +59,7 @@ module.exports = (db) => {
         }
     });
 
-    // [일반 로그인]
+
     router.post('/login', async (req, res) => {
         const { user_id, password } = req.body;
 
@@ -93,7 +93,7 @@ module.exports = (db) => {
         }
     });
 
-    // [네이버 로그인]
+
     router.get('/naver', passport.authenticate('naver'));
 
     router.get('/naver/callback',
@@ -110,7 +110,7 @@ module.exports = (db) => {
         }
     );
 
-    // [로그아웃]
+
     router.get('/logout', (req, res) => {
         req.session.destroy((err) => {
             if (err) {

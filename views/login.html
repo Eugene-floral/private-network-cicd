@@ -15,28 +15,25 @@
             min-height: 100vh;
         }
 
-        /* 배너 유지 */
         .navbar {
             border-bottom: 1px solid #eee;
         }
 
-        /* 중앙 정렬 컨테이너 */
         .login-wrapper {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding-top: 110px; /* 네비바 높이 고려 */
+            padding-top: 110px; 
             padding-bottom: 60px;
         }
         
         .login-container {
             width: 100%;
-            max-width: 400px; /* 조금 더 컴팩트하게 조절 */
+            max-width: 400px; 
             padding: 20px;
         }
 
-        /* Welcome! 타이틀 스타일 */
         .welcome-title {
             font-size: 3.2rem;
             font-weight: 400;
@@ -46,7 +43,7 @@
             letter-spacing: -1px;
         }
 
-        /* 입력창 라벨 및 스타일 */
+        
         .form-group-custom {
             margin-bottom: 18px;
         }
@@ -68,7 +65,7 @@
             border-color: #4a6fa5;
         }
 
-        /* 로그인 유지 및 비번찾기 */
+         
         .login-options {
             display: flex;
             justify-content: space-between;
@@ -82,7 +79,7 @@
             color: #4a6fa5;
         }
 
-        /* 로그인 버튼 */
+        
         .btn-signin {
             background-color: #4a6fa5;
             color: white;
@@ -98,7 +95,7 @@
             color: white;
         }
 
-        /* 간편 로그인 구분선 */
+        
         .separator {
             display: flex;
             align-items: center;
@@ -116,33 +113,33 @@
             padding: 0 15px;
         }
 
-        /* [핵심] 소셜 로그인 이미지 버튼 스타일 (둥근 네모) */
+        
         .social-icons {
             display: flex;
             justify-content: center;
-            gap: 15px; /* 버튼 사이 간격 */
+            gap: 15px; 
         }
         .social-btn-img {
             display: inline-block;
             transition: transform 0.2s;
-            /* [변경] 원형 배경 제거, 끝이 둥근 네모 스타일 정의 */
-            width: 44px;  /* 컴팩트한 크기로 축소 */
+     
+            width: 44px;  
             height: 44px;
-            border-radius: 10px; /* [변경] 끝이 동그란 네모 형태 */
-            overflow: hidden; /* 이미지가 배경을 벗어나지 않게 */
-            border: 1px solid #eee; /* 아주 연한 테두리 */
+            border-radius: 10px; 
+            overflow: hidden; 
+            border: 1px solid #eee; 
         }
         .social-btn-img:hover {
-            transform: scale(1.08); /* 마우스 올렸을 때 살짝 커짐 */
+            transform: scale(1.08); 
         }
-        /* 로고 이미지 크기 조정 (크기 동일화 및 object-fit) */
+        
         .social-btn-img img {
-            width: 100%;  /* 부모 요소(44px)에 꽉 차게 */
+            width: 100%;  
             height: 100%;
-            object-fit: cover; /* [핵심] 정사각형 비율에 맞춰 이미지를 꽉 채움 */
+            object-fit: cover; 
         }
 
-        /* 하단 링크 */
+  
         .signup-link {
             text-align: center;
             margin-top: 40px;
